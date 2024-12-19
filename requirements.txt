@@ -8,9 +8,10 @@ pretty-midi
 pydantic
 scipy
 split-folders
-torch
--f https://data.pyg.org/whl/torch-1.13.0+cpu.html
-torch-scatter
 yacs
 tqdm
 streamlit
+torch
+-f https://data.pyg.org/whl/torch-2.5.1%2Bcpu.html
+torch-scatter
+torchvision
