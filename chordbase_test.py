@@ -4,6 +4,8 @@ from datetime import datetime
 import json
 import subprocess
 import os
+import torch
+print(f"Torch version: {torch.__version__}")
 
 def export_parameters_to_json(parameters, file_path):
     """
