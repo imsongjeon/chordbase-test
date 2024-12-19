@@ -1,5 +1,5 @@
-python3 ComMU-cpu/generate.py \
---checkpoint_dir ComMU-cpu/train/pretrained/checkpoint_best.pt \
+python3 generate.py \
+--checkpoint_dir train/pretrained/checkpoint_best.pt \
 --output_dir ./output \
 --bpm 109 \
 --audio_key Cm \

@@ -56,8 +56,8 @@ def run_generate_script(output_dir, bpm, audio_key, time_signature, pitch_range,
     if not validate_parameters(output_dir, num_measures, chord_progression):
           return
     command = [
-        "python3", "ComMU-cpu/generate.py",
-        "--checkpoint_dir", "ComMU-cpu/train/pretrained/checkpoint_best.pt",
+        "python3", "generate.py",
+        "--checkpoint_dir", "train/pretrained/checkpoint_best.pt",
         "--output_dir", output_dir
     ]
 
