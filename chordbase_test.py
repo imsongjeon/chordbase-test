@@ -36,9 +36,9 @@ def validate_parameters(output_dir, num_measures, chord_progression):
     """
     Function to validate the input parameters.
     """
-    if not os.path.exists(output_dir):
-        st.error("Output directory does not exist.")
-        return False
+    # if not os.path.exists(output_dir):
+    #     st.error("Output directory does not exist.")
+    #     return False
     input_list = chord_progression.split('-')
     required_count = num_measures * 8
     
@@ -55,8 +55,13 @@ def run_generate_script(output_dir, bpm, audio_key, time_signature, pitch_range,
     """
     if not validate_parameters(output_dir, num_measures, chord_progression):
           return
+    # command = [
+    #     "python3", "generate.py",
+    #     "--checkpoint_dir", "train/pretrained/checkpoint_best.pt",
+    #     "--output_dir", output_dir
+    # ]
     command = [
-        "python3", "generate.py",
+        "./generate",
         "--checkpoint_dir", "train/pretrained/checkpoint_best.pt",
         "--output_dir", output_dir
     ]
@@ -79,6 +84,9 @@ def run_generate_script(output_dir, bpm, audio_key, time_signature, pitch_range,
 
     # Run the script
     print("Running command:", command)
+    current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    st.success(f"[{current_time}] Generating MIDI files. Please wait...")
+
     result = subprocess.run(command, capture_output=True, text=True)
     current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     if result.returncode == 0:
