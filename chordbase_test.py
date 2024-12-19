@@ -5,17 +5,6 @@ import json
 import subprocess
 import os
 
-def export_parameters_to_json(parameters, file_path):
-    """
-    Export parameters to a JSON file.
-    """
-    try:
-        with open(file_path, 'w') as f:
-            json.dump(parameters, f, indent=4)
-        st.success(f"Parameters successfully exported to {file_path}.")
-    except Exception as e:
-        st.error(f"Error exporting parameters: {e}")
-
 def import_parameters_from_json(uploaded_file):
     """
     Import parameters from a JSON file.
@@ -136,12 +125,14 @@ default_params = {
     # "temperature": 1.0,
 }
 
+st.markdown("### Import Parameters")
 uploaded_file = st.file_uploader("Choose a file to import parameters", type=["json"])
 if uploaded_file is not None:
     imported_params = import_parameters_from_json(uploaded_file)
     default_params.update(imported_params)
     
 st.markdown("---")
+st.markdown("### Generate MIDI")
 # User input fields
 output_dir = st.text_input("Output Directory", value=default_params["output_dir"])
 bpm = st.number_input("BPM (Beats Per Minute)", min_value=1, max_value=300, step=1, value=default_params["bpm"])
@@ -182,28 +173,25 @@ if st.button("Run"):
     )
 
 st.markdown("---")
+st.markdown("### Export Parameters")
+parameters = {
+    "output_dir": output_dir,
+    "bpm": bpm,
+    "audio_key": audio_key,
+    "time_signature": time_signature,
+    "pitch_range": pitch_range,
+    "num_measures": num_measures,
+    "inst": inst,
+    "genre": genre,
+    "track_role": track_role,
+    "rhythm": rhythm,
+    "min_velocity": min_velocity,
+    "max_velocity": max_velocity,
+    "chord_progression": chord_progression,
+    "num_generate": num_generate,
+    # "top_k": top_k,
+    # "temperature": temperature
+}
+export_file_name = st.text_input("Enter export file name (without extension):", value="export")
+st.download_button("Download", json.dumps(parameters, indent=4), f"{export_file_name}.json")
 
-export_file_name = st.text_input("Enter export file name (without extension):")
-if st.button("Export Parameters"):
-    if export_file_name:
-        parameters = {
-            "output_dir": output_dir,
-            "bpm": bpm,
-            "audio_key": audio_key,
-            "time_signature": time_signature,
-            "pitch_range": pitch_range,
-            "num_measures": num_measures,
-            "inst": inst,
-            "genre": genre,
-            "track_role": track_role,
-            "rhythm": rhythm,
-            "min_velocity": min_velocity,
-            "max_velocity": max_velocity,
-            "chord_progression": chord_progression,
-            "num_generate": num_generate,
-            # "top_k": top_k,
-            # "temperature": temperature
-        }
-        export_parameters_to_json(parameters, f"{export_file_name}.json")
-    else:
-        st.warning("Please enter a file name.")
