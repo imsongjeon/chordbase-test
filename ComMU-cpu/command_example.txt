@@ -1,0 +1,16 @@
+python3 ComMU-cpu/generate.py \
+--checkpoint_dir ComMU-cpu/train/pretrained/checkpoint_best.pt \
+--output_dir ./output \
+--bpm 109 \
+--audio_key Cm \
+--time_signature 4/4 \
+--pitch_range mid \
+--num_measures 8 \
+--inst yanggeum \
+--genre newage \
+--min_velocity 70 \
+--max_velocity 85 \
+--track_role main_melody \
+--rhythm standard \
+--chord_progression Cm-Cm-Cm-Cm-Cm-Cm-Cm-Cm-Bb-Bb-Bb-Bb-Bb-Bb-Bb-Bb-Cm-Cm-Cm-Cm-Cm-Cm-Cm-Cm-Bb-Bb-Bb-Bb-Bb-Bb-Bb-Bb-Cm-Cm-Cm-Cm-Cm-Cm-Cm-Cm-Cm-Cm-Cm-Cm-Cm-Cm-Cm-Cm-Cm-Cm-Cm-Cm-Cm-Cm-Cm-Cm-Cm-Cm-Cm-Cm-Cm-Cm-Cm-Cm \
+--num_generate 1

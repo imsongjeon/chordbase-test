@@ -1,0 +1,13 @@
+matplotlib
+miditoolkit
+mido
+music21
+pandas
+parmap
+pretty-midi
+pydantic
+scipy
+split-folders
+torch
+yacs
+tqdm
