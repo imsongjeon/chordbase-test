@@ -11,7 +11,4 @@ split-folders
 yacs
 tqdm
 streamlit
-torch
--f https://data.pyg.org/whl/torch-2.5.1%2Bcpu.html
-torch-scatter
-torchvision
+torch==2.5.1
