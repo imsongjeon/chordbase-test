@@ -48,7 +48,7 @@ def generate_script(output_dir, bpm, audio_key, time_signature, pitch_range, num
     #     "--output_dir", output_dir
     # ]
     command = [
-        "./generate",
+        "./chordbase-test",
         "--checkpoint_dir", "train/pretrained/checkpoint_best.pt",
         "--output_dir", output_dir
     ]
