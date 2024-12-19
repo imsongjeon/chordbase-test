@@ -37,11 +37,9 @@ def validate_parameters(output_dir, num_measures, chord_progression):
     
     return True
 
-def run_generate_script(output_dir, bpm, audio_key, time_signature, pitch_range, num_measures, inst, genre,
+
+def generate_script(output_dir, bpm, audio_key, time_signature, pitch_range, num_measures, inst, genre,
                         track_role, rhythm, min_velocity, max_velocity, chord_progression, num_generate):
-    """
-    Function to run the generate.py script with the selected parameters.
-    """
     if not validate_parameters(output_dir, num_measures, chord_progression):
           return
     # command = [
@@ -70,7 +68,17 @@ def run_generate_script(output_dir, bpm, audio_key, time_signature, pitch_range,
     command += ["--num_generate", str(num_generate)]
     # command += ["--top_k", str(top_k)]
     # command += ["--temperature", str(temperature)]
+    return command
 
+
+def run_generate_script(output_dir, bpm, audio_key, time_signature, pitch_range, num_measures, inst, genre,
+                        track_role, rhythm, min_velocity, max_velocity, chord_progression, num_generate):
+    """
+    Function to run the generate.py script with the selected parameters.
+    """
+    # Generate the command
+    command = generate_script(output_dir, bpm, audio_key, time_signature, pitch_range, num_measures, inst, genre,
+                        track_role, rhythm, min_velocity, max_velocity, chord_progression, num_generate)
     # Run the script
     print("Running command:", command)
     current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -152,7 +160,7 @@ num_generate = st.number_input("Number of Files to Generate", min_value=1, step=
 # temperature = st.number_input("Temperature", min_value=0.1, step=0.1, value=default_params["temperature"], disabled=True)
 
 # Run Button
-if st.button("Run"):
+if st.button("Run", disabled=True):
     run_generate_script(
         output_dir=output_dir,
         bpm=bpm,
@@ -171,6 +179,28 @@ if st.button("Run"):
         # top_k=top_k,
         # temperature=temperature
     )
+
+if st.button("Create Script", disabled=False):
+    command = generate_script(
+        output_dir=output_dir,
+        bpm=bpm,
+        audio_key=audio_key,
+        time_signature=time_signature,
+        pitch_range=pitch_range,
+        num_measures=num_measures,
+        inst=inst,
+        genre=genre,
+        track_role=track_role,
+        rhythm=rhythm,
+        min_velocity=min_velocity,
+        max_velocity=max_velocity,
+        chord_progression=chord_progression,
+        num_generate=num_generate,
+        # top_k=top_k,
+        # temperature=temperature
+    )
+    if command:
+        st.text_area("Script", value=" ".join(command), height=200)
 
 st.markdown("---")
 st.markdown("### Export Parameters")
