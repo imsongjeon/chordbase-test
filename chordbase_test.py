@@ -98,7 +98,7 @@ st.title("Chordbase MIDI File Generator")
 AUDIO_KEY_LIST = ["C", "C#", "Db", "D", "Eb", "E", "F", "F#", "Gb", "G", "Ab", "A", "Bb", "B",
     "Cm", "C#m", "Dm", "D#m", "Ebm", "Em", "Fm", "F#m", "Gm", "G#m", "Abm", "Am", "A#m", "Bbm", "Bm"]
 TIME_SIGNITURE_LIST = ["4/4", "3/4", "6/8", "12/8"]
-PITCH_RANGE_LIST = ["very_low", "low", "mid", "high", "very_high"]
+PITCH_RANGE_LIST = ["very_low", "low", "mid_low", "mid", "mid_high", "high", "very_high"]
 NUM_MEASURES_LIST = [4, 8, 16]
 INST_LIST = ["accordion", "acoustic_bass", "acoustic_guitar", "acoustic_piano", "banjo", "bassoon", "bell", 
     "brass_ensemble", "celesta", "choir", "clarinet", "drums_full", "drums_tops", "electric_bass", 
