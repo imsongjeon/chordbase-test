@@ -1,10 +1,17 @@
 import sys
 import streamlit as st
 from datetime import datetime
+from fractions import Fraction
 import json
 import subprocess
 import os
 
+
+def calculate_num_chords(num_measures, time_signature):
+    """
+    Calculate the number of notes based on the number of measures and time signature.
+    """
+    return num_measures * Fraction(time_signature) * 8
 def import_parameters_from_json(uploaded_file):
     """
     Import parameters from a JSON file.
@@ -21,7 +28,7 @@ def import_parameters_from_json(uploaded_file):
         return {}
 
 
-def validate_parameters(output_dir, num_measures, chord_progression):
+def validate_parameters(num_measures, time_signature, chord_progression):
     """
     Function to validate the input parameters.
     """
@@ -29,7 +36,7 @@ def validate_parameters(output_dir, num_measures, chord_progression):
     #     st.error("Output directory does not exist.")
     #     return False
     input_list = chord_progression.split('-')
-    required_count = num_measures * 8
+    required_count = calculate_num_chords(num_measures, time_signature)
     
     if len(input_list) != required_count:
         st.error(f"chord_progression has {len(input_list)} items but should have {required_count}.")
@@ -40,7 +47,7 @@ def validate_parameters(output_dir, num_measures, chord_progression):
 
 def generate_script(output_dir, bpm, audio_key, time_signature, pitch_range, num_measures, inst, genre,
                         track_role, rhythm, min_velocity, max_velocity, chord_progression, num_generate):
-    if not validate_parameters(output_dir, num_measures, chord_progression):
+    if not validate_parameters(num_measures, time_signature, chord_progression):
           return
     # command = [
     #     "python3", "generate.py",
@@ -225,3 +232,17 @@ parameters = {
 export_file_name = st.text_input("Enter export file name (without extension):", value="export")
 st.download_button("Download", json.dumps(parameters, indent=4), f"{export_file_name}.json")
 
+st.markdown("---")
+st.markdown("### Chord Progression Tool")
+input_chord_progression = st.text_input("Input Chord Progression", placeholder="Am-F-C-G")
+
+def process_chord_progression(input_chord_progression, time_signature):
+    if not input_chord_progression:
+        return ""
+    input_list = input_chord_progression.split('-')
+    output_list = []
+    for chord in input_list:
+        output_list.extend([chord] * int(Fraction(time_signature) * 8))
+    return "-".join(output_list)
+
+st.text_area("Output Chord Progression", value=process_chord_progression(input_chord_progression, time_signature), placeholder=process_chord_progression("Am-F-C-G", time_signature))
