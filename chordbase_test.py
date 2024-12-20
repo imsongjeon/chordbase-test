@@ -210,6 +210,21 @@ if st.button("Create Script", disabled=False):
         st.text_area("Script", value=" ".join(command), height=200)
 
 st.markdown("---")
+st.markdown("### Chord Progression Tool")
+input_chord_progression = st.text_input("Input Chord Progression", placeholder="Am-F-C-G")
+
+def process_chord_progression(input_chord_progression, time_signature):
+    if not input_chord_progression:
+        return ""
+    input_list = input_chord_progression.split('-')
+    output_list = []
+    for chord in input_list:
+        output_list.extend([chord] * int(Fraction(time_signature) * 8))
+    return "-".join(output_list)
+
+st.text_area("Output Chord Progression", value=process_chord_progression(input_chord_progression, time_signature), placeholder=process_chord_progression("Am-F-C-G", time_signature))
+
+st.markdown("---")
 st.markdown("### Export Parameters")
 parameters = {
     "output_dir": output_dir,
@@ -231,18 +246,3 @@ parameters = {
 }
 export_file_name = st.text_input("Enter export file name (without extension):", value="export")
 st.download_button("Download", json.dumps(parameters, indent=4), f"{export_file_name}.json")
-
-st.markdown("---")
-st.markdown("### Chord Progression Tool")
-input_chord_progression = st.text_input("Input Chord Progression", placeholder="Am-F-C-G")
-
-def process_chord_progression(input_chord_progression, time_signature):
-    if not input_chord_progression:
-        return ""
-    input_list = input_chord_progression.split('-')
-    output_list = []
-    for chord in input_list:
-        output_list.extend([chord] * int(Fraction(time_signature) * 8))
-    return "-".join(output_list)
-
-st.text_area("Output Chord Progression", value=process_chord_progression(input_chord_progression, time_signature), placeholder=process_chord_progression("Am-F-C-G", time_signature))
