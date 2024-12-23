@@ -117,7 +117,7 @@ INST_LIST = ["accordion", "acoustic_bass", "acoustic_guitar", "acoustic_piano", 
     "synth_voice", "timpani", "trombone", "trumpet", "tuba", "ukulele", "vibraphone", "whistle", 
     "xylophone", "zither", "orgel", "synth_brass", "sax", "bamboo_flute", "yanggeum", "vocal"]
 GENRE_LIST = ["newage", "cinematic"]
-TRACK_ROLE_LIST = ["main_melody", "sub_melody", "accompaniment", "bass", "pad"]
+TRACK_ROLE_LIST = ["main_melody", "sub_melody", "accompaniment", "bass", "pad", "riff"]
 RHYTHM_LIST = ["standard", "triplet"]
 
 
