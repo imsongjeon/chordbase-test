@@ -1,7 +1,8 @@
 import json
 import streamlit as st
+from streamlit.runtime.uploaded_file_manager import UploadedFile
 
-def import_parameters_from_json(uploaded_file):
+def import_parameters_from_json(uploaded_file: UploadedFile) -> dict:
     """
     Import parameters from a JSON file.
     """

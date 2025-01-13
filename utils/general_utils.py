@@ -5,14 +5,14 @@ import json
 import subprocess
 
 
-def calculate_num_chords_per_measure(time_signature):
+def calculate_num_chords_per_measure(time_signature: str) -> int:
     """
     Calculate the number of notes based on the number of measures and time signature.
     """
     return int(Fraction(time_signature) * 8)
 
 
-def validate_parameters(num_measures, time_signature, chord_progression):
+def validate_parameters(num_measures: int, time_signature: str, chord_progression: str) -> bool:
     """
     Function to validate the input parameters.
     """
@@ -32,8 +32,22 @@ def validate_parameters(num_measures, time_signature, chord_progression):
     return True
 
 
-def generate_script(output_dir, bpm, audio_key, time_signature, pitch_range, num_measures, inst, genre,
-                        track_role, rhythm, min_velocity, max_velocity, chord_progression, num_generate):
+def generate_script(
+        output_dir: str,
+        bpm: int,
+        audio_key: str,
+        time_signature: str,
+        pitch_range: str,
+        num_measures: int,
+        inst: str,
+        genre: str,
+        track_role: str,
+        rhythm: str,
+        min_velocity: int,
+        max_velocity: int,
+        chord_progression: str,
+        num_generate: int,
+    ) -> list:
     if not validate_parameters(num_measures, time_signature, chord_progression):
           return
     command = [
@@ -65,8 +79,22 @@ def generate_script(output_dir, bpm, audio_key, time_signature, pitch_range, num
     return command
 
 
-def run_generate_script(output_dir, bpm, audio_key, time_signature, pitch_range, num_measures, inst, genre,
-                        track_role, rhythm, min_velocity, max_velocity, chord_progression, num_generate):
+def run_script(
+    output_dir: str,
+    bpm: int,
+    audio_key: str,
+    time_signature: str,
+    pitch_range: str,
+    num_measures: int,
+    inst: str,
+    genre: str,
+    track_role: str,
+    rhythm: str,
+    min_velocity: int,
+    max_velocity: int,
+    chord_progression: str,
+    num_generate: int,
+) -> None:
     """
     Function to run the generate.py script with the selected parameters.
     """

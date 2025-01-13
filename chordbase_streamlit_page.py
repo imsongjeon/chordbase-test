@@ -3,7 +3,7 @@ import streamlit as st
 
 from utils.chord_progress_utils import create_chord_progression, process_chord_progression, validate_chords, validate_measure
 from utils.file_utils import import_parameters_from_json
-from utils.general_utils import calculate_num_chords_per_measure, generate_script, run_generate_script
+from utils.general_utils import calculate_num_chords_per_measure, generate_script, run_script
 
 # Streamlit UI
 st.title("Chordbase MIDI File Generator")
@@ -143,7 +143,7 @@ elif input_method == "new":
 
 # Run Button
 if st.button("Run", disabled=True):
-    run_generate_script(
+    run_script(
         output_dir=output_dir,
         bpm=bpm,
         audio_key=audio_key,
