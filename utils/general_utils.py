@@ -20,13 +20,13 @@ def validate_parameters(num_measures, time_signature, chord_progression):
     #     st.error("Output directory does not exist.")
     #     return False
     if not chord_progression:
-        st.error("Please complete the chord progression.")
+        st.error("코드 진행을 완성해 주세요.")
         return False
     input_list = chord_progression.split('-')
     required_count = calculate_num_chords_per_measure(time_signature) * num_measures
     
     if len(input_list) != required_count:
-        st.error(f"chord_progression has {len(input_list)} items but should have {required_count}.")
+        st.error(f"현재 코드 진행에는 {len(input_list)}개의 코드가 있지만, {required_count}개가 있어야 합니다.")
         return False
     
     return True
