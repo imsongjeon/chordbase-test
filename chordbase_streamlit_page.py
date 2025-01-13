@@ -1,7 +1,9 @@
 import json
 import streamlit as st
 
-from utils import calculate_num_chords_per_measure, generate_script, import_parameters_from_json, process_chord_progression, run_generate_script
+from utils.chord_progress_utils import create_chord_progression, process_chord_progression, validate_chords, validate_measure
+from utils.file_utils import import_parameters_from_json
+from utils.general_utils import calculate_num_chords_per_measure, generate_script, run_generate_script
 
 # Streamlit UI
 st.title("Chordbase MIDI File Generator")
@@ -52,79 +54,51 @@ if uploaded_file is not None:
     print(default_params)
     
 st.markdown("---")
+
 st.markdown("### Generate MIDI")
 # User input fields
 output_dir = st.text_input("Output Directory (저장 디렉토리)", value=default_params["output_dir"])
-num_measures = st.selectbox("Number of Measures (마디 수)", NUM_MEASURES_LIST, index=NUM_MEASURES_LIST.index(default_params["num_measures"]))
+num_measures = st.selectbox(
+    "Number of Measures (마디 수)",
+    NUM_MEASURES_LIST,
+    index=NUM_MEASURES_LIST.index(default_params["num_measures"])
+)
 bpm = st.number_input("BPM (Beats Per Minute)", min_value=1, max_value=300, step=1, value=default_params["bpm"])
 audio_key = st.selectbox("Audio Key (음조)", AUDIO_KEY_LIST, index=AUDIO_KEY_LIST.index(default_params["audio_key"]))
-time_signature = st.selectbox("Time Signature (박자)", TIME_SIGNITURE_LIST, index=TIME_SIGNITURE_LIST.index(default_params["time_signature"]))
-pitch_range = st.selectbox("Pitch Range (음역대)", PITCH_RANGE_LIST, index=PITCH_RANGE_LIST.index(default_params["pitch_range"]))
+time_signature = st.selectbox(
+    "Time Signature (박자)",
+    TIME_SIGNITURE_LIST,
+    index=TIME_SIGNITURE_LIST.index(default_params["time_signature"])
+)
+pitch_range = st.selectbox(
+    "Pitch Range (음역대)",
+    PITCH_RANGE_LIST,
+    index=PITCH_RANGE_LIST.index(default_params["pitch_range"])
+)
 inst = st.selectbox("Instrument (악기)", INST_LIST, index=INST_LIST.index(default_params["inst"]))
 genre = st.selectbox("Genre (장르)", GENRE_LIST, index=GENRE_LIST.index(default_params["genre"]))
-track_role = st.selectbox("Track Role (트랙 역할)", TRACK_ROLE_LIST, index=TRACK_ROLE_LIST.index(default_params["track_role"]))
+track_role = st.selectbox(
+    "Track Role (트랙 역할)",
+    TRACK_ROLE_LIST,
+    index=TRACK_ROLE_LIST.index(default_params["track_role"])
+)
 rhythm = st.selectbox("Rhythm (리듬)", RHYTHM_LIST, index=RHYTHM_LIST.index(default_params["rhythm"]))
 min_velocity = st.slider("Minimum Velocity", 1, 127, value=default_params["min_velocity"])
 max_velocity = st.slider("Maximum Velocity", 1, 127, value=default_params["max_velocity"])
-num_generate = st.number_input("Number of Files to Generate (생성 파일 수)", min_value=1, step=1, value=default_params["num_generate"])
+num_generate = st.number_input(
+    "Number of Files to Generate (생성 파일 수)",
+    min_value=1, step=1, value=default_params["num_generate"]
+)
 # top_k = st.number_input("Top K", min_value=1, step=1, value=default_params["top_k"], disabled=True)
 # temperature = st.number_input("Temperature", min_value=0.1, step=0.1, value=default_params["temperature"], disabled=True)
+
 st.markdown("#### Chord Progression (코드 진행)")
 input_method = st.selectbox(
     "코드 진행 입력 방식을 선택하세요",
     ["default", "new"],
     format_func=lambda x: "기존 방식" if x == "default" else "새로운 방식(테스트 중)",
-    index=1
+    index=0,
 )
-
-def validate_chords(measure_chords: list) -> bool:
-    err_msg_list = []
-    for i, chord in enumerate(measure_chords):
-        if not chord:
-            if i == 0:
-                err_msg_list.append(f"Chord 1 is required.")
-            continue
-        if not validate_chord_input(chord):
-            err_msg_list.append(f"Chord {i + 1}: {chord} is not a valid chord.")
-
-    if err_msg_list:
-        st.error("\n\n".join(err_msg_list))
-        return False
-    return True
-
-def validate_chord_input(chord: str) -> bool:
-    CHORD_OPTIONS = ['C', 'C#', 'D', 'D#', 'E', 'F#', 'F', 'G', 'G#', 'A', 'A#', 'B']
-    CHORD_QUALITY_OPTIONS = ['m', 'dim', 'm7', 'maj7', 'm7b5', 'dim7', 'sus4']
-    for chord_option in CHORD_OPTIONS:
-        if chord.startswith(chord_option):
-            quality = chord[len(chord_option):]
-            if '#' in quality:
-                continue
-            if quality in CHORD_QUALITY_OPTIONS or quality == '':
-                return True
-            else:
-                return False
-    return False
-
-
-def validate_measure(measure_chords_str: str, num_chords_per_measure: int) -> bool:
-    if not measure_chords_str:
-        return False
-    measure_chords = measure_chords_str.split('-')
-    if len(measure_chords) != num_chords_per_measure:
-        st.error(f"Measure has {len(measure_chords)} chords but should have {num_chords_per_measure}.")
-        return False
-    if not validate_chords(measure_chords):
-        return False
-    return True
-    
-
-def create_chord_progression(measure_chords: list) -> str:
-    for i, chord in enumerate(measure_chords):
-        if not chord and i > 0:
-            measure_chords[i] = measure_chords[i - 1]
-    return '-'.join(measure_chords)
-
 
 if input_method == "default":
     chord_progression = st.text_area(
@@ -132,7 +106,6 @@ if input_method == "default":
         placeholder="C-C-E-E-G-G ...",
         value=default_params["chord_progression"]
     )
-
 elif input_method == "new":
     use_chord_input = st.checkbox("코드 입력 사용")
     chords = []
@@ -143,7 +116,7 @@ elif input_method == "new":
         st.markdown(f"##### Measure {measure_num + 1}")
         if use_chord_input:
             measure_chords = [None] * num_chords_per_measure
-            cols = st.columns(num_chords_per_measure)  # Create 8 columns for the measure
+            cols = st.columns(num_chords_per_measure)
             for col_num in range(num_chords_per_measure):
                 with cols[col_num]:
                     measure_chords[col_num] = st.text_input(
@@ -158,10 +131,10 @@ elif input_method == "new":
         else:
             measure_chord_value = ""
         measure_chords_str = st.text_input(
-                                    f"Measure {measure_num + 1} Chords",
-                                    key=f"measure_{measure_num}_chords",
-                                    value=measure_chord_value,
-                                )
+            f"Chords",
+            key=f"measure_{measure_num}_chords",
+            value=measure_chord_value,
+        )
         measure_validation_result = validate_measure(measure_chords_str, num_chords_per_measure)
         measure_validation_results[measure_num] = measure_validation_result
         chord_progression_list.append(measure_chords_str)
@@ -212,12 +185,18 @@ if st.button("Create Script", disabled=False):
         st.text_area("Script", value=" ".join(command), height=200)
 
 st.markdown("---")
+
 st.markdown("### Chord Progression Tool")
 input_chord_progression = st.text_input("Input Chord Progression", placeholder="Am-F-C-G")
 
-st.text_area("Output Chord Progression", value=process_chord_progression(input_chord_progression, time_signature), placeholder=process_chord_progression("Am-F-C-G", time_signature))
+st.text_area(
+    "Output Chord Progression",
+    value=process_chord_progression(input_chord_progression, time_signature),
+    placeholder=process_chord_progression("Am-F-C-G", time_signature)
+)
 
 st.markdown("---")
+
 st.markdown("### Export Parameters")
 parameters = {
     "output_dir": output_dir,

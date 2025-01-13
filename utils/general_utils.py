@@ -12,33 +12,6 @@ def calculate_num_chords_per_measure(time_signature):
     return int(Fraction(time_signature) * 8)
 
 
-def process_chord_progression(input_chord_progression, time_signature):
-    if not input_chord_progression:
-        return ""
-    input_list = input_chord_progression.split('-')
-    output_list = []
-    for chord in input_list:
-        output_list.extend([chord] * int(Fraction(time_signature) * 8))
-    return "-".join(output_list)
-
-
-def import_parameters_from_json(uploaded_file):
-    """
-    Import parameters from a JSON file.
-    """
-    try:
-        # Read and parse the JSON file
-        parameters = json.load(uploaded_file)
-        
-        # Display the imported parameters
-        st.success("File imported successfully!")
-        print("Imported parameters:", parameters)
-        return parameters
-    except Exception as e:
-        st.error(f"Error importing parameters: {e}")
-        return {}
-
-
 def validate_parameters(num_measures, time_signature, chord_progression):
     """
     Function to validate the input parameters.
@@ -47,7 +20,7 @@ def validate_parameters(num_measures, time_signature, chord_progression):
     #     st.error("Output directory does not exist.")
     #     return False
     if not chord_progression:
-        st.error("Please enter a chord progression.")
+        st.error("Please complete the chord progression.")
         return False
     input_list = chord_progression.split('-')
     required_count = calculate_num_chords_per_measure(time_signature) * num_measures
