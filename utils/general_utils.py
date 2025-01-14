@@ -47,19 +47,22 @@ def generate_script(
         max_velocity: int,
         chord_progression: str,
         num_generate: int,
+        use_python: bool = False,
     ) -> list:
     if not validate_parameters(num_measures, time_signature, chord_progression):
           return
-    command = [
-        "python3", "generate.py",
-        "--checkpoint_dir", "train/pretrained/checkpoint_best.pt",
-        "--output_dir", output_dir
-    ]
-    # command = [
-    #     "./chordbase-test",
-    #     "--checkpoint_dir", "train/pretrained/checkpoint_best.pt",
-    #     "--output_dir", output_dir
-    # ]
+    if use_python:
+        command = [
+            "python3", "generate.py",
+            "--checkpoint_dir", "train/pretrained/checkpoint_best.pt",
+            "--output_dir", output_dir
+        ]
+    else:
+        command = [
+            "./chordbase-test",
+            "--checkpoint_dir", "train/pretrained/checkpoint_best.pt",
+            "--output_dir", output_dir
+        ]
 
     command += ["--bpm", str(bpm)]
     command += ["--audio_key", audio_key]

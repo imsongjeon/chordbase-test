@@ -150,6 +150,7 @@ elif input_method == "new":
         chord_progression_list.append(measure_chords_str)
 
     chord_progression = '-'.join(chord_progression_list) if all(measure_validation_results) else ''
+use_python = st.checkbox("create python script (`python3 generate.py ...`)", value=False)
 
 # Run Button
 if st.button("Run", disabled=True):
@@ -188,6 +189,7 @@ if st.button("Create Script", disabled=False):
         max_velocity=max_velocity,
         chord_progression=chord_progression,
         num_generate=num_generate,
+        use_python=use_python,
         # top_k=top_k,
         # temperature=temperature
     )
