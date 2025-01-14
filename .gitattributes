@@ -1,2 +1,0 @@
-train/**/*.pt filter=lfs diff=lfs merge=lfs -text
-generate filter=lfs diff=lfs merge=lfs -text
