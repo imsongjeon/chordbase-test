@@ -117,7 +117,9 @@ if input_method == "default":
         value=default_params["chord_progression"]
     )
 elif input_method == "new":
-    use_chord_input = st.checkbox("코드 입력 사용", value=True)
+    use_chord_input = st.checkbox("코드 자동 채움 사용", value=True)
+    if use_chord_input:
+        st.caption("비어 있는 코드를 이전 코드로 자동으로 채워줍니다.")
     chords = []
     measure_validation_results = [False] * num_measures
     chord_progression_list = []
@@ -150,7 +152,7 @@ elif input_method == "new":
         chord_progression_list.append(measure_chords_str)
 
     chord_progression = '-'.join(chord_progression_list) if all(measure_validation_results) else ''
-use_python = st.checkbox("create python script (`python3 generate.py ...`)", value=False)
+use_python = st.checkbox("create python script", value=False)
 
 # Run Button
 if st.button("Run", disabled=True):
