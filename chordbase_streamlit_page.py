@@ -106,7 +106,7 @@ st.markdown("""
 input_method = st.selectbox(
     "코드 진행 입력 방식을 선택하세요",
     ["default", "new"],
-    format_func=lambda x: "기존 방식" if x == "default" else "새로운 방식(테스트 중)",
+    format_func=lambda x: "텍스트 입력 (기존)" if x == "default" else "마디별 입력 (신규)",
     index=0,
 )
 
