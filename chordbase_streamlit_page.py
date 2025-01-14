@@ -1,7 +1,7 @@
 import json
 import streamlit as st
 
-from utils.chord_progress_utils import create_chord_progression, process_chord_progression, validate_chords, validate_measure
+from utils.chord_utils import create_chord_progression, process_chord_progression, validate_chords, validate_measure
 from utils.file_utils import import_parameters_from_json
 from utils.general_utils import calculate_num_chords_per_measure, generate_script, run_script
 
@@ -93,6 +93,16 @@ num_generate = st.number_input(
 # temperature = st.number_input("Temperature", min_value=0.1, step=0.1, value=default_params["temperature"], disabled=True)
 
 st.markdown("#### Chord Progression (코드 진행)")
+st.markdown("""
+    사용 가능 코드: `C`, `C#`, `D`, `D#`, `E`, `F`, `F#`, `G`, `G#`, `A`, `A#`, `B`  
+    사용 가능 퀄리티 옵션: `m`, `dim`, `m7`, `maj7`, `m7b5`, `dim7`, `sus4`  
+    예시: `C`(C Major), `Cm`(C Minor), `D#dim`(D# Diminished), `F#maj7`(F# Major 7), `Gsus4`(G Suspended 4)  
+
+    반박자마다 하나의 코드를 입력해야 합니다.  
+    예: `4/4` 박자의 경우, 8개의 코드, `3/4` 박자의 경우, 6개의 코드가 필요합니다.  
+    코드 진행은 '-'(하이픈)으로 구분하여 입력하세요.  
+    
+""")
 input_method = st.selectbox(
     "코드 진행 입력 방식을 선택하세요",
     ["default", "new"],
@@ -107,7 +117,7 @@ if input_method == "default":
         value=default_params["chord_progression"]
     )
 elif input_method == "new":
-    use_chord_input = st.checkbox("코드 입력 사용")
+    use_chord_input = st.checkbox("코드 입력 사용", value=True)
     chords = []
     measure_validation_results = [False] * num_measures
     chord_progression_list = []
