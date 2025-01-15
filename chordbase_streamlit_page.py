@@ -1,7 +1,7 @@
 import json
 import streamlit as st
 
-from utils.chord_utils import create_chord_progression, process_chord_progression, validate_chords, validate_measure
+from utils.chord_utils import CHORD_OPTIONS, CHORD_QUALITY_OPTIONS, create_chord_progression, process_chord_progression, validate_chords, validate_measure
 from utils.file_utils import import_parameters_from_json
 from utils.general_utils import calculate_num_chords_per_measure, generate_script, run_script
 
@@ -93,9 +93,9 @@ num_generate = st.number_input(
 # temperature = st.number_input("Temperature", min_value=0.1, step=0.1, value=default_params["temperature"], disabled=True)
 
 st.markdown("#### Chord Progression (코드 진행)")
-st.markdown("""
-    사용 가능 코드: `C`, `C#`, `D`, `D#`, `E`, `F`, `F#`, `G`, `G#`, `A`, `A#`, `B`  
-    사용 가능 퀄리티 옵션: `m`, `dim`, `m7`, `maj7`, `m7b5`, `dim7`, `sus4`  
+st.markdown(f"""
+    사용 가능 코드: {', '.join([f'`{chord}`' for chord in CHORD_OPTIONS])}  
+    사용 가능 퀄리티 옵션: {', '.join([f'`{quality}`' for quality in CHORD_QUALITY_OPTIONS])}  
     예시: `C`(C Major), `Cm`(C Minor), `D#dim`(D# Diminished), `F#maj7`(F# Major 7), `Gsus4`(G Suspended 4)  
 
     반박자마다 하나의 코드를 입력해야 합니다.  

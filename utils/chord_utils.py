@@ -1,6 +1,9 @@
 from fractions import Fraction
 import streamlit as st
 
+CHORD_OPTIONS = ['C', 'C#', 'Db', 'D', 'D#', 'Eb', 'E', 'F', 'F#', 'Gb', 'G', 'G#', 'Ab', 'A', 'A#', 'Bb', 'B']
+CHORD_QUALITY_OPTIONS = ['m', 'dim', '7', 'm7', 'maj7', 'm7b5', 'dim7', 'sus4']
+
 def validate_chords(measure_chords: list) -> bool:
     err_msg_list = []
     for i, chord in enumerate(measure_chords):
@@ -18,9 +21,6 @@ def validate_chords(measure_chords: list) -> bool:
 
 
 def validate_chord_input(chord: str) -> bool:
-    CHORD_OPTIONS = ['C', 'C#', 'D', 'D#', 'E', 'F#', 'F', 'G', 'G#', 'A', 'A#', 'B']
-    CHORD_QUALITY_OPTIONS = ['m', 'dim', 'm7', 'maj7', 'm7b5', 'dim7', 'sus4']
-
     for chord_option in CHORD_OPTIONS:
         if chord.startswith(chord_option):
             quality = chord[len(chord_option):]
