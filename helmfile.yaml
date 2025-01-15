@@ -1,0 +1,7 @@
+releases:
+  - name: chordbase-streamlit
+    namespace: default
+    chart: ./k8s/chordbase-streamlit
+    version: 0.1.0
+    values:
+      - k8s/chordbase-streamlit/values.yaml

@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "chordbase-streamlit.fullname" . }}-test-connection"
+  labels:
+    {{- include "chordbase-streamlit.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['{{ include "chordbase-streamlit.fullname" . }}:{{ .Values.service.port }}']
+  restartPolicy: Never
